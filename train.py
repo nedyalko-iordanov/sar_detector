@@ -322,6 +322,10 @@ def _main_(args):
 if __name__ == '__main__':
     argparser = argparse.ArgumentParser(description='train and evaluate YOLO_v3 model on any dataset')
     argparser.add_argument('-c', '--conf', help='path to configuration file')
+    argparser.add_argument('-a', '--articles', help='path to article images with cropping paths')
+    argparser.add_argument('-b', '--background', help='path to background images')
+    argparser.add_argument('-s', '--saveloc', help='path to save model')
+    argparser.add_argument('-p', '--pretrained', help='path to pretrained weights file')
 
     args = argparser.parse_args()
     #args = {
