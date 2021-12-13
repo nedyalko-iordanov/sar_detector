@@ -7,6 +7,13 @@ from keras.models import Model
 import struct
 import cv2
 import sys
+from matplotlib import pyplot as plt
+import tensorflow as tf
+import keras as k
+
+sess = tf.Session()
+graph = tf.get_default_graph()
+k.backend.set_session(sess)
 
 np.set_printoptions(sys.maxsize)
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -49,37 +56,39 @@ class WeightReader:
         return self.all_weights[self.offset-size:self.offset]
 
     def load_weights(self, model):
-        for i in range(106):
-            try:
-                conv_layer = model.get_layer('conv_' + str(i))
-                print("loading weights of convolution #" + str(i))
+        with graph.as_default():
+            k.backend.set_session(sess)
+            for i in range(106):
+                try:
+                    conv_layer = model.get_layer('conv_' + str(i))
+                    print("loading weights of convolution #" + str(i))
 
-                if i not in [81, 93, 105]:
-                    norm_layer = model.get_layer('bnorm_' + str(i))
+                    if i not in [81, 93, 105]:
+                        norm_layer = model.get_layer('bnorm_' + str(i))
 
-                    size = np.prod(norm_layer.get_weights()[0].shape)
+                        size = np.prod(norm_layer.get_weights()[0].shape)
 
-                    beta  = self.read_bytes(size) # bias
-                    gamma = self.read_bytes(size) # scale
-                    mean  = self.read_bytes(size) # mean
-                    var   = self.read_bytes(size) # variance            
+                        beta  = self.read_bytes(size) # bias
+                        gamma = self.read_bytes(size) # scale
+                        mean  = self.read_bytes(size) # mean
+                        var   = self.read_bytes(size) # variance
 
-                    weights = norm_layer.set_weights([gamma, beta, mean, var])  
+                        weights = norm_layer.set_weights([gamma, beta, mean, var])
 
-                if len(conv_layer.get_weights()) > 1:
-                    bias   = self.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
-                    kernel = self.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                    
-                    kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-                    kernel = kernel.transpose([2,3,1,0])
-                    conv_layer.set_weights([kernel, bias])
-                else:
-                    kernel = self.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                    kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-                    kernel = kernel.transpose([2,3,1,0])
-                    conv_layer.set_weights([kernel])
-            except ValueError:
-                print("no convolution #" + str(i))     
+                    if len(conv_layer.get_weights()) > 1:
+                        bias   = self.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
+                        kernel = self.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
+
+                        kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
+                        kernel = kernel.transpose([2,3,1,0])
+                        conv_layer.set_weights([kernel, bias])
+                    else:
+                        kernel = self.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
+                        kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
+                        kernel = kernel.transpose([2,3,1,0])
+                        conv_layer.set_weights([kernel])
+                except ValueError:
+                    print("no convolution #" + str(i))
     
     def reset(self):
         self.offset = 0
@@ -380,8 +389,10 @@ def draw_boxes(image, boxes, labels, obj_thresh):
     return image      
 
 def _main_(args):
-    weights_path = args.weights
-    image_path   = args.image
+    #weights_path = args.weights
+    #image_path   = args.image
+    weights_path = args['weights']
+    image_path   = args['image']
 
     # set some parameters
     net_h, net_w = 416, 416
@@ -418,8 +429,10 @@ def _main_(args):
     new_image = preprocess_input(image, net_h, net_w)
 
     # run the prediction
-    yolos = yolov3.predict(new_image)
-    boxes = []
+    with graph.as_default():
+        k.backend.set_session(sess)
+        yolos = yolov3.predict(new_image)
+        boxes = []
 
     for i in range(len(yolos)):
         # decode the output of the network
@@ -438,5 +451,13 @@ def _main_(args):
     cv2.imwrite(image_path[:-4] + '_detected' + image_path[-4:], (image).astype('uint8')) 
 
 if __name__ == '__main__':
-    args = argparser.parse_args()
+    #args = argparser.parse_args()
+    weights = \
+    'C:\\\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector_epoch_1.h5'
+    image = \
+    'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\1639411806987.jpg'
+    args = {
+        'weights': weights,
+        'image': image
+    }
     _main_(args)
