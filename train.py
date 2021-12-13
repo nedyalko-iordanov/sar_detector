@@ -320,15 +320,15 @@ def _main_(args):
     #print('mAP: {:.4f}'.format(sum(average_precisions.values()) / len(average_precisions)))
 
 if __name__ == '__main__':
-    #argparser = argparse.ArgumentParser(description='train and evaluate YOLO_v3 model on any dataset')
-    #argparser.add_argument('-c', '--conf', help='path to configuration file')
+    argparser = argparse.ArgumentParser(description='train and evaluate YOLO_v3 model on any dataset')
+    argparser.add_argument('-c', '--conf', help='path to configuration file')
 
-    #args = argparser.parse_args()
-    args = {
-        'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\keras-yolo3\\zoo\\config_detector.json',
-        'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw_debug',
-        'background_images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
-        'saved_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
-        'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
-    }
+    args = argparser.parse_args()
+    #args = {
+    #    'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\keras-yolo3\\zoo\\config_detector.json',
+    #    'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw_debug',
+    #    'background_images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
+    #    'saved_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
+    #    'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
+    #}
     _main_(args)
