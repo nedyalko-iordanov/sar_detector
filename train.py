@@ -193,11 +193,12 @@ def _main_(args):
     #background_images_location = args.get('background_images_location')
     #saved_weights_location = args.get('saved_weights_location')
     #pretrained_weights_location = args.get('pretrained_weights_location')
+
     config_path = args.conf
-    images_location = args.images_location
-    background_images_location = args.background_images_location
-    saved_weights_location = args.saved_weights_location
-    pretrained_weights_location = args.pretrained_weights_location
+    images_location = args.articles
+    background_images_location = args.background
+    saved_weights_location = args.saveloc
+    pretrained_weights_location = args.pretrained
 
     with open(config_path) as config_buffer:    
         config = json.loads(config_buffer.read())
