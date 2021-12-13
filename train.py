@@ -81,7 +81,7 @@ def create_callbacks(saved_weights_name, tensorboard_logs, model_to_save):
         monitor     = 'loss', 
         min_delta   = 0.01, 
         patience    = 7, 
-        mode        = 'min', 
+        mode        = 'min',
         verbose     = 1
     )
     checkpoint = CustomModelCheckpoint(
@@ -118,7 +118,8 @@ def create_model(
     warmup_batches, 
     ignore_thresh, 
     multi_gpu, 
-    saved_weights_name, 
+    saved_weights_name,
+    pretrained_weights_location,
     lr,
     grid_scales,
     obj_scale,
@@ -163,7 +164,7 @@ def create_model(
         print("\nLoading pretrained weights.\n")
         template_model.load_weights(saved_weights_name)
     else:
-        template_model.load_weights("backend.h5", by_name=True)
+        template_model.load_weights(pretrained_weights_location, by_name=True)
 
     if multi_gpu > 1:
         train_model = multi_gpu_model(template_model, gpus=multi_gpu)
@@ -190,6 +191,8 @@ def _main_(args):
     config_path = args.get('conf')
     images_location = args.get('images_location')
     background_images_location = args.get('background_images_location')
+    saved_weights_location = args.get('saved_weights_location')
+    pretrained_weights_location = args.get('pretrained_weights_location')
 
     with open(config_path) as config_buffer:    
         config = json.loads(config_buffer.read())
@@ -260,7 +263,7 @@ def _main_(args):
     ###############################
     #   Create the model 
     ###############################
-    if os.path.exists(config['train']['saved_weights_name']): 
+    if os.path.exists(saved_weights_location):
         config['train']['warmup_epochs'] = 0
     warmup_batches = config['train']['warmup_epochs'] * (config['train']['train_times']*len(train_generator))   
 
@@ -276,7 +279,8 @@ def _main_(args):
         warmup_batches      = warmup_batches,
         ignore_thresh       = config['train']['ignore_thresh'],
         multi_gpu           = multi_gpu,
-        saved_weights_name  = config['train']['saved_weights_name'],
+        saved_weights_name  = saved_weights_location,
+        pretrained_weights_location = pretrained_weights_location,
         lr                  = config['train']['learning_rate'],
         grid_scales         = config['train']['grid_scales'],
         obj_scale           = config['train']['obj_scale'],
@@ -288,7 +292,7 @@ def _main_(args):
     ###############################
     #   Kick off the training
     ###############################
-    callbacks = create_callbacks(config['train']['saved_weights_name'], config['train']['tensorboard_dir'], infer_model)
+    callbacks = create_callbacks(saved_weights_location, config['train']['tensorboard_dir'], infer_model)
 
     train_model.fit_generator(
         generator        = train_generator, 
@@ -302,7 +306,7 @@ def _main_(args):
 
     # make a GPU version of infer_model for evaluation
     if multi_gpu > 1:
-        infer_model = load_model(config['train']['saved_weights_name'])
+        infer_model = load_model(saved_weights_location)
 
     ###############################
     #   Run the evaluation
@@ -324,5 +328,7 @@ if __name__ == '__main__':
         'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\keras-yolo3\\zoo\\config_detector.json',
         'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw_debug',
         'background_images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
+        'saved_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
+        'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
     }
     _main_(args)
