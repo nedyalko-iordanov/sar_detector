@@ -399,7 +399,8 @@ def _main_(args):
               "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", \
               "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
     '''
-    anchors = [17, 18, 28, 24, 36, 34, 42, 44, 56, 51, 72, 66, 90, 95, 92, 154, 139, 281],
+    #anchors = [17, 18, 28, 24, 36, 34, 42, 44, 56, 51, 72, 66, 90, 95, 92, 154, 139, 281]
+    anchors = [[90, 95, 92, 154, 139, 281], [42, 44, 56, 51, 72, 66], [17, 18, 28, 24, 36, 34]]
     labels = ["beer", "bottle_opener", "brusketi", "costa_coffee", "crackers", "croissant",
                "dolce_gusto_coffee", "dove", "fererro_rocher", "hogrenas", "jam", "juice",
                "lindt_chocolate", "milka_chocolates", "musli", "nuts", "oreo", "pasta", "sauce",
