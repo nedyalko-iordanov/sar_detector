@@ -8,7 +8,7 @@ import struct
 import cv2
 import sys
 
-np.set_printoptions(sys.maxsize())
+np.set_printoptions(sys.maxsize)
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
