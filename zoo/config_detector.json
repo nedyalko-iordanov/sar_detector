@@ -22,7 +22,7 @@
         "warmup_epochs":        1,
         "ignore_thresh":        0.5,
         "gpus":                 "0",
-        "epoch_size":           10,
+        "epoch_size":           1000,
 
         "grid_scales":          [1,1,1],
         "obj_scale":            5,
