@@ -35,7 +35,7 @@ class RandomBatchGenerator(Sequence):
         return self.epoch_size
 
     def __getitem__(self, idx):
-        print('Generating batch: ' + str(idx))
+        #print('Generating batch: ' + str(idx))
         start = time.time()
         # get image input size, change every 10 batches
         net_h, net_w = self._get_net_size(idx)
@@ -143,7 +143,7 @@ class RandomBatchGenerator(Sequence):
             # increase instance counter in the current batch
             instance_count += 1
         seconds = time.time() - start
-        print('Batch generated for ' + str(round(seconds, 2)) + ' sec.')
+        #print('Batch generated for ' + str(round(seconds, 2)) + ' sec.')
         return [x_batch, t_batch, yolo_1, yolo_2, yolo_3], [dummy_yolo_1, dummy_yolo_2, dummy_yolo_3]
 
     def _get_net_size(self, idx):
