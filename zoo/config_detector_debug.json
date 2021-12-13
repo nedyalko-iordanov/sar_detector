@@ -16,10 +16,10 @@
         "cache_name":           "blabla.pkl",
 
         "train_times":          3,
-        "batch_size":           16,
+        "batch_size":           8,
         "learning_rate":        1e-4,
-        "nb_epochs":            9,
-        "warmup_epochs":        1,
+        "nb_epochs":            1,
+        "warmup_epochs":        0,
         "ignore_thresh":        0.5,
         "gpus":                 "0",
         "epoch_size":           10,

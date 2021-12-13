@@ -242,7 +242,7 @@ def _main_(args):
                                max_object_overlap_area=0.2)
     train_generator = RandomBatchGenerator(
         random_generator    = random_generator,
-        epoch_size          = 1024,
+        epoch_size          = config['train']['epoch_size'],
         anchors             = config['model']['anchors'],
         downsample          = 32, # ratio between network input's size and network output's size, 32 for YOLOv3
         batch_size          = config['train']['batch_size'],
