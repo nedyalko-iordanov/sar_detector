@@ -6,8 +6,9 @@ from keras.layers.merge import add, concatenate
 from keras.models import Model
 import struct
 import cv2
+import sys
 
-np.set_printoptions(threshold=np.nan)
+np.set_printoptions(sys.maxsize())
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
@@ -385,6 +386,7 @@ def _main_(args):
     # set some parameters
     net_h, net_w = 416, 416
     obj_thresh, nms_thresh = 0.5, 0.45
+    '''
     anchors = [[116,90,  156,198,  373,326],  [30,61, 62,45,  59,119], [10,13,  16,30,  33,23]]
     labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", \
               "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", \
@@ -396,7 +398,12 @@ def _main_(args):
               "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse", \
               "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", \
               "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
-
+    '''
+    anchors = [17, 18, 28, 24, 36, 34, 42, 44, 56, 51, 72, 66, 90, 95, 92, 154, 139, 281],
+    labels = ["beer", "bottle_opener", "brusketi", "costa_coffee", "crackers", "croissant",
+               "dolce_gusto_coffee", "dove", "fererro_rocher", "hogrenas", "jam", "juice",
+               "lindt_chocolate", "milka_chocolates", "musli", "nuts", "oreo", "pasta", "sauce",
+               "tea", "toy", "vinegar", "whiskey"]
     # make the yolov3 model to predict 80 classes on COCO
     yolov3 = make_yolov3_model()
 
