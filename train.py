@@ -194,6 +194,8 @@ def _main_(args):
     #saved_weights_location = args.get('saved_weights_location')
     #pretrained_weights_location = args.get('pretrained_weights_location')
 
+
+
     config_path = args.conf
     images_location = args.articles
     background_images_location = args.background
@@ -202,6 +204,8 @@ def _main_(args):
 
     with open(config_path) as config_buffer:    
         config = json.loads(config_buffer.read())
+
+    labels = config['model']['labels']
 
     ###############################
     #   Parse the annotations 
@@ -242,6 +246,7 @@ def _main_(args):
                                max_object_overlap_area=0.2)
     train_generator = RandomBatchGenerator(
         random_generator    = random_generator,
+        labels              = labels,
         epoch_size          = config['train']['epoch_size'],
         anchors             = config['model']['anchors'],
         downsample          = 32, # ratio between network input's size and network output's size, 32 for YOLOv3
@@ -277,7 +282,7 @@ def _main_(args):
     multi_gpu = len(config['train']['gpus'].split(','))
 
     train_model, infer_model = create_model(
-        nb_class            = len(train_generator.labels),
+        nb_class            = len(labels),
         anchors             = config['model']['anchors'], 
         max_box_per_image   = train_generator.random_generator.max_objects,
         max_grid            = [config['model']['max_input_size'], config['model']['max_input_size']], 
@@ -299,6 +304,7 @@ def _main_(args):
     #   Kick off the training
     ###############################
     callbacks = create_callbacks(saved_weights_location, config['train']['tensorboard_dir'], infer_model)
+    infer_model.save('infer_model.h5')
 
     train_model.fit_generator(
         generator        = train_generator, 
@@ -332,13 +338,13 @@ if __name__ == '__main__':
     argparser.add_argument('-b', '--background', help='path to background images')
     argparser.add_argument('-s', '--saveloc', help='path to save model')
     argparser.add_argument('-p', '--pretrained', help='path to pretrained weights file')
-
     args = argparser.parse_args()
+
     #args = {
-    #    'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\keras-yolo3\\zoo\\config_detector.json',
-    #    'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw_debug',
+    #    'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector.json',
+    #    'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw',
     #    'background_images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
-    #    'saved_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
-    #    'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
+    #    'saved_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector.h5',
+    #    'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector_epoch_1.h5',
     #}
     _main_(args)

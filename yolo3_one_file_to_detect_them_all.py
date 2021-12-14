@@ -10,10 +10,9 @@ import sys
 from matplotlib import pyplot as plt
 import tensorflow as tf
 import keras as k
+import json
+from train import create_model
 
-sess = tf.Session()
-graph = tf.get_default_graph()
-k.backend.set_session(sess)
 
 np.set_printoptions(sys.maxsize)
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -416,23 +415,54 @@ def _main_(args):
                "dolce_gusto_coffee", "dove", "fererro_rocher", "hogrenas", "jam", "juice",
                "lindt_chocolate", "milka_chocolates", "musli", "nuts", "oreo", "pasta", "sauce",
                "tea", "toy", "vinegar", "whiskey"]
-    # make the yolov3 model to predict 80 classes on COCO
-    yolov3 = make_yolov3_model()
 
-    # load the weights trained on COCO into the model
-    weight_reader = WeightReader(weights_path)
-    weight_reader.load_weights(yolov3)
+    ############
+    config_path = args.get('conf')
+    saved_weights_location = 'bblabla'
+    pretrained_weights_location = args.get('weights')
 
+    with open(config_path) as config_buffer:
+        config = json.loads(config_buffer.read())
+
+    ###############################
+    #   Create the model
+    ###############################
+    if os.path.exists(saved_weights_location):
+        config['train']['warmup_epochs'] = 0
+    warmup_batches = config['train']['warmup_epochs']
+
+    os.environ['CUDA_VISIBLE_DEVICES'] = config['train']['gpus']
+    multi_gpu = len(config['train']['gpus'].split(','))
+
+    train_model, infer_model = create_model(
+        nb_class            = len(labels),
+        anchors             = config['model']['anchors'],
+        max_box_per_image   = 5,
+        max_grid            = [config['model']['max_input_size'], config['model']['max_input_size']],
+        batch_size          = config['train']['batch_size'],
+        warmup_batches      = warmup_batches,
+        ignore_thresh       = config['train']['ignore_thresh'],
+        multi_gpu           = multi_gpu,
+        saved_weights_name  = saved_weights_location,
+        pretrained_weights_location = pretrained_weights_location,
+        lr                  = config['train']['learning_rate'],
+        grid_scales         = config['train']['grid_scales'],
+        obj_scale           = config['train']['obj_scale'],
+        noobj_scale         = config['train']['noobj_scale'],
+        xywh_scale          = config['train']['xywh_scale'],
+        class_scale         = config['train']['class_scale'],
+    )
+
+    yolov3 = infer_model
+    ############
     # preprocess the image
     image = cv2.imread(image_path)
     image_h, image_w, _ = image.shape
     new_image = preprocess_input(image, net_h, net_w)
 
     # run the prediction
-    with graph.as_default():
-        k.backend.set_session(sess)
-        yolos = yolov3.predict(new_image)
-        boxes = []
+    yolos = yolov3.predict(new_image)
+    boxes = []
 
     for i in range(len(yolos)):
         # decode the output of the network
@@ -453,11 +483,12 @@ def _main_(args):
 if __name__ == '__main__':
     #args = argparser.parse_args()
     weights = \
-    'C:\\\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector_epoch_1.h5'
+    'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector_epoch_2.h5'
     image = \
-    'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\1639411806987.jpg'
+    'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\1639411806987_2.jpg'
     args = {
         'weights': weights,
-        'image': image
+        'image': image,
+        'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector.json'
     }
     _main_(args)

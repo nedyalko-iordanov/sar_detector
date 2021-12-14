@@ -10,6 +10,7 @@ class RandomBatchGenerator(Sequence):
     def __init__(self,
                  random_generator,
                  anchors,
+                 labels,
                  epoch_size=1024,
                  downsample=32,  # ratio between network input's size and network output's size, 32 for YOLOv3
                  batch_size=1,
@@ -19,7 +20,18 @@ class RandomBatchGenerator(Sequence):
                  ):
         self.random_generator = random_generator
         self.batch_size = batch_size
-        self.labels = random_generator.labels
+        self.labels = labels
+        print("Comparing config and random generator labels")
+        print("Config labels:")
+        print(labels)
+        print("Random generator labels:")
+        print(random_generator.labels)
+        if len(set(labels) & set(random_generator.labels)) == len(labels):
+            print("random generator and config labels match in size")
+        else:
+            print("random generator and config labels do not match in size")
+            print("Not matching labels are: ")
+            print(set(labels) ^ set(random_generator.labels))
         self.epoch_size = epoch_size
         self.downsample = downsample
         self.max_box_per_image = random_generator.max_objects

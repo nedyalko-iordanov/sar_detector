@@ -11,9 +11,13 @@ from tqdm import tqdm
 import numpy as np
 
 def _main_(args):
-    config_path  = args.conf
-    input_path   = args.input
-    output_path  = args.output
+    #config_path  = args.conf
+    #input_path   = args.input
+    #output_path  = args.output
+
+    config_path  = args['conf']
+    input_path   = args['input']
+    output_path  = args['output']
 
     with open(config_path) as config_buffer:    
         config = json.load(config_buffer)
@@ -120,13 +124,22 @@ def _main_(args):
             draw_boxes(image, boxes, config['model']['labels'], obj_thresh) 
      
             # write the image with bounding boxes to file
-            cv2.imwrite(output_path + image_path.split('/')[-1], np.uint8(image))         
+            print(output_path + image_path.split('\\')[-1])
+            if cv2.imwrite(output_path + image_path.split('\\')[-1], np.uint8(image)):
+                print("True")
+            else:
+                print("False")
 
 if __name__ == '__main__':
-    argparser = argparse.ArgumentParser(description='Predict with a trained yolo model')
-    argparser.add_argument('-c', '--conf', help='path to configuration file')
-    argparser.add_argument('-i', '--input', help='path to an image, a directory of images, a video, or webcam')    
-    argparser.add_argument('-o', '--output', default='output/', help='path to output directory')   
+    #argparser = argparse.ArgumentParser(description='Predict with a trained yolo model')
+    #argparser.add_argument('-c', '--conf', help='path to configuration file')
+    #argparser.add_argument('-i', '--input', help='path to an image, a directory of images, a video, or webcam')
+    #argparser.add_argument('-o', '--output', default='output/', help='path to output directory')
     
-    args = argparser.parse_args()
+    #args = argparser.parse_args()
+    args = {
+        "conf": "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector.json",
+        "input": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\",
+        "output": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\detected_2\\"
+    }
     _main_(args)
