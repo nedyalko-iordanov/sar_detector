@@ -18,7 +18,7 @@
         "train_times":          3,
         "batch_size":           16,
         "learning_rate":        1e-4,
-        "nb_epochs":            9,
+        "nb_epochs":            2,
         "warmup_epochs":        1,
         "ignore_thresh":        0.5,
         "gpus":                 "0",
