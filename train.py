@@ -86,7 +86,7 @@ def create_callbacks(saved_weights_name, tensorboard_logs, model_to_save):
     )
     checkpoint = CustomModelCheckpoint(
         model_to_save   = model_to_save,
-        filepath        = saved_weights_name,# + '{epoch:02d}.h5', 
+        filepath        = saved_weights_name + '{epoch:02d}.h5',
         monitor         = 'loss', 
         verbose         = 1, 
         save_best_only  = True, 
@@ -341,10 +341,11 @@ if __name__ == '__main__':
     args = argparser.parse_args()
 
     #args = {
-    #    'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector.json',
-    #    'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw',
+    #    'conf': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector_debug.json',
+    #    'images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\raw_debug',
     #    'background_images_location': 'C:\\Users\\Freeware Sys\\Desktop\\articles\\backgrounds_debug',
-    #    'saved_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector.h5',
-    #    'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector_epoch_1.h5',
+    #    'saved_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\03_detector_',
+    #    #'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\detector_epoch_1.h5',
+    #    'pretrained_weights_location': 'C:\\Users\\Freeware Sys\\PycharmProjects\\keras-yolo3\\backend.h5',
     #}
     _main_(args)

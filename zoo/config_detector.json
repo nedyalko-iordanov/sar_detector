@@ -31,7 +31,7 @@
         "class_scale":          1,
 
         "tensorboard_dir":      "log_detector",
-        "saved_weights_name":   "detector.h5",
+        "saved_weights_name":   "3_detector_",
         "debug":                true
     },
 

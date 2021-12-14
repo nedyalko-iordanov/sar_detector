@@ -3,10 +3,7 @@
         "min_input_size":       288,
         "max_input_size":       448,
         "anchors":              [17,18, 28,24, 36,34, 42,44, 56,51, 72,66, 90,95, 92,154, 139,281],
-        "labels":               ["beer", "bottle_opener", "brusketi", "costa_coffee", "crackers", "croissant",
-                                 "dolce_gusto_coffee", "dove", "fererro_rocher", "hogrenas", "jam", "juice",
-                                 "lindt_chocolate", "milka_chocolates", "musli", "nuts", "oreo", "pasta", "sauce",
-                                 "tea", "toy", "vinegar", "whiskey"]
+        "labels":               ["crackers", "juice"]
 
     },
 
@@ -15,14 +12,14 @@
         "train_annot_folder":   "C:\\Users\\Freeware Sys\\Desktop\\articles\\raccoon_dataset-master\\annotations\\",
         "cache_name":           "blabla.pkl",
 
-        "train_times":          3,
+        "train_times":          1,
         "batch_size":           8,
         "learning_rate":        1e-4,
         "nb_epochs":            1,
         "warmup_epochs":        0,
         "ignore_thresh":        0.5,
         "gpus":                 "0",
-        "epoch_size":           10,
+        "epoch_size":           2,
 
         "grid_scales":          [1,1,1],
         "obj_scale":            5,
@@ -31,7 +28,7 @@
         "class_scale":          1,
 
         "tensorboard_dir":      "log_detector",
-        "saved_weights_name":   "blabla",
+        "saved_weights_name":   "03_detector_",
         "debug":                true
     },
 
