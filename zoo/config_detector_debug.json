@@ -28,7 +28,7 @@
         "class_scale":          1,
 
         "tensorboard_dir":      "log_detector",
-        "saved_weights_name":   "03_detector_",
+        "saved_weights_name":   "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\2_detector_epoch_1.h5",
         "debug":                true
     },
 

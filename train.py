@@ -173,15 +173,16 @@ def create_model(
 
     optimizer = Adam(lr=lr, clipnorm=0.001)
 
-    pred_layer_idx = [80, 81, #-yolo1
-                      92, 93, #-yolo2
-                      104, 105] #-yolo3
-    for layer in train_model.layers:
-        if int(layer.name.split('_')[-1]) not in pred_layer_idx:
-            layer.trainable = False
-            print('Layer ' + layer.name + ' is set to NOT trainable.')
-        else:
-            print('Layer ' + layer.name + ' is set to trainable.')
+    # Freeze layers
+    #pred_layer_idx = [80, 81, #-yolo1
+    #                  92, 93, #-yolo2
+    #                  104, 105] #-yolo3
+    #for layer in train_model.layers:
+    #    if int(layer.name.split('_')[-1]) not in pred_layer_idx:
+    #        layer.trainable = False
+    #        print('Layer ' + layer.name + ' is set to NOT trainable.')
+    #    else:
+    #        print('Layer ' + layer.name + ' is set to trainable.')
 
     train_model.compile(loss=dummy_loss, optimizer=optimizer)             
 
