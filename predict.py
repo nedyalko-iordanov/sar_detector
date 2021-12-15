@@ -140,6 +140,6 @@ if __name__ == '__main__':
     args = {
         "conf": "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector.json",
         "input": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\",
-        "output": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\detected_4\\"
+        "output": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\detected_8-5\\"
     }
     _main_(args)

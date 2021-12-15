@@ -18,7 +18,8 @@ class YoloLayer(Layer):
         self.obj_scale      = obj_scale
         self.noobj_scale    = noobj_scale
         self.xywh_scale     = xywh_scale
-        self.class_scale    = class_scale        
+        self.class_scale    = class_scale
+        self.called = 0
 
         # make a persistent mesh grid
         max_grid_h, max_grid_w = max_grid
@@ -189,9 +190,13 @@ class YoloLayer(Layer):
             loss = tf.Print(loss, [grid_h, tf.reduce_sum(loss_xy), 
                                         tf.reduce_sum(loss_wh), 
                                         tf.reduce_sum(loss_conf), 
-                                        tf.reduce_sum(loss_class)],  message='loss xy, wh, conf, class: \t',   summarize=1000)   
+                                        tf.reduce_sum(loss_class)],  message='loss xy, wh, conf, class: \t',   summarize=1000)
 
-
+        tf.summary.scalar('loss_xy', data=[grid_h, loss_xy], step=epoch)
+        tf.summary.scalar('loss_wh', data=[grid_h, loss_wh], step=epoch)
+        tf.summary.scalar('loss_conf', data=[grid_h, loss_conf], step=epoch)
+        tf.summary.scalar('loss_class', data=[grid_h, loss_class], step=epoch)
+        self.called += 1
         return loss*self.grid_scale
 
     def compute_output_shape(self, input_shape):
@@ -230,8 +235,12 @@ def create_yolov3_model(
     obj_scale,
     noobj_scale,
     xywh_scale,
-    class_scale
+    class_scale,
+    logdir
 ):
+    file_writer = tf.summary.create_file_writer(logdir + "/metrics")
+    file_writer.set_as_default()
+
     input_image = Input(shape=(None, None, 3)) # net_h, net_w, 3
     true_boxes  = Input(shape=(1, 1, 1, max_box_per_image, 4))
     true_yolo_1 = Input(shape=(None, None, len(anchors)//6, 4+1+nb_class)) # grid_h, grid_w, nb_anchor, 5+nb_class

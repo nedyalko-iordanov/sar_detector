@@ -19,7 +19,6 @@ from random_generator import ImageGenerator
 from generator_2 import RandomBatchGenerator
 from random_generator_single_image import ImageGeneratorSingle
 
-
 config = tf.compat.v1.ConfigProto(
     gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.9)
     # device_count = {'GPU': 1}
@@ -89,7 +88,7 @@ def create_callbacks(saved_weights_name, tensorboard_logs, model_to_save):
         filepath        = saved_weights_name + '{epoch:02d}.h5',
         monitor         = 'loss', 
         verbose         = 1, 
-        save_best_only  = True, 
+        save_best_only  = False,
         mode            = 'min', 
         period          = 1
     )
@@ -125,7 +124,8 @@ def create_model(
     obj_scale,
     noobj_scale,
     xywh_scale,
-    class_scale  
+    class_scale,
+    logdir
 ):
     if multi_gpu > 1:
         with tf.device('/cpu:0'):
@@ -141,7 +141,8 @@ def create_model(
                 obj_scale           = obj_scale,
                 noobj_scale         = noobj_scale,
                 xywh_scale          = xywh_scale,
-                class_scale         = class_scale
+                class_scale         = class_scale,
+                logdir              = logdir
             )
     else:
         template_model, infer_model = create_yolov3_model(
@@ -156,7 +157,8 @@ def create_model(
             obj_scale           = obj_scale,
             noobj_scale         = noobj_scale,
             xywh_scale          = xywh_scale,
-            class_scale         = class_scale
+            class_scale         = class_scale,
+            logdir              = logdir
         )  
 
     # load the pretrained weight if exists, otherwise load the backend weight only
@@ -174,15 +176,15 @@ def create_model(
     optimizer = Adam(lr=lr, clipnorm=0.001)
 
     # Freeze layers
-    #pred_layer_idx = [80, 81, #-yolo1
-    #                  92, 93, #-yolo2
-    #                  104, 105] #-yolo3
-    #for layer in train_model.layers:
-    #    if int(layer.name.split('_')[-1]) not in pred_layer_idx:
-    #        layer.trainable = False
-    #        print('Layer ' + layer.name + ' is set to NOT trainable.')
-    #    else:
-    #        print('Layer ' + layer.name + ' is set to trainable.')
+    pred_layer_idx = [80, 81, #-yolo1
+                      92, 93, #-yolo2
+                      104, 105] #-yolo3
+    for layer in train_model.layers:
+        if int(layer.name.split('_')[-1]) not in pred_layer_idx:
+            layer.trainable = False
+            print('Layer ' + layer.name + ' is set to NOT trainable.')
+        else:
+            print('Layer ' + layer.name + ' is set to trainable.')
 
     train_model.compile(loss=dummy_loss, optimizer=optimizer)             
 
@@ -242,7 +244,7 @@ def _main_(args):
 
     random_generator = ImageGeneratorSingle(images_location,
                                background_images_location,
-                               object_proportion_range=[0.3, 0.9],
+                               object_proportion_range=[0.4, 0.9],
                                max_perspective_jitter=0.1,
                                max_object_overlap_area=0.2)
     train_generator = RandomBatchGenerator(
@@ -299,6 +301,7 @@ def _main_(args):
         noobj_scale         = config['train']['noobj_scale'],
         xywh_scale          = config['train']['xywh_scale'],
         class_scale         = config['train']['class_scale'],
+        logdir              = config['train']['tensorboard_dir']
     )
 
     ###############################
