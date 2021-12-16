@@ -316,8 +316,8 @@ def _main_(args):
         epochs           = config['train']['nb_epochs'] + config['train']['warmup_epochs'], 
         verbose          = 1,
         callbacks        = callbacks, 
-        workers          = 4,
-        max_queue_size   = 8
+        workers          = 8,
+        max_queue_size   = 64
     )
 
     # make a GPU version of infer_model for evaluation
