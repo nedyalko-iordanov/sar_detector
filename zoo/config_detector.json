@@ -31,7 +31,7 @@
         "class_scale":          3,
 
         "tensorboard_dir":      "log_detector",
-        "saved_weights_name":   "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\3_detector_18.h5",
+        "saved_weights_name":   "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\1_detector_04.h5",
         "debug":                false
     },
 

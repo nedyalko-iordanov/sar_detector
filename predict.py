@@ -139,7 +139,7 @@ if __name__ == '__main__':
     #args = argparser.parse_args()
     args = {
         "conf": "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\zoo\\config_detector.json",
-        "input": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\",
-        "output": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\detected_8-5\\"
+        "input": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\test_images\\",
+        "output": "C:\\Users\\Freeware Sys\\PycharmProjects\\SAR\\test_images\\detected_6\\"
     }
     _main_(args)
