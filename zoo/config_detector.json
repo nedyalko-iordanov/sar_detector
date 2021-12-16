@@ -18,7 +18,7 @@
         "train_times":          3,
         "batch_size":           16,
         "learning_rate":        1e-4,
-        "nb_epochs":            10,
+        "nb_epochs":            7,
         "warmup_epochs":        3,
         "ignore_thresh":        0.5,
         "gpus":                 "0",
@@ -28,7 +28,7 @@
         "obj_scale":            5,
         "noobj_scale":          1,
         "xywh_scale":           1,
-        "class_scale":          3,
+        "class_scale":          5,
 
         "tensorboard_dir":      "log_detector",
         "saved_weights_name":   "C:\\Users\\Freeware Sys\\PycharmProjects\\sar_detector\\1_detector_04.h5",
