@@ -21,7 +21,7 @@
         "nb_epochs":            7,
         "warmup_epochs":        3,
         "ignore_thresh":        0.5,
-        "gpus":                 "/device:GPU:0,/device:XLA_GPU:0",
+        "gpus":                 "/GPU:0,/XLA_GPU:0",
         "epoch_size":           1000,
 
         "grid_scales":          [0.5,0.7,1],
