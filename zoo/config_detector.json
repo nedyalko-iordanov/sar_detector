@@ -15,13 +15,13 @@
         "train_annot_folder":   "C:\\Users\\Freeware Sys\\Desktop\\articles\\raccoon_dataset-master\\annotations\\",
         "cache_name":           "blabla.pkl",
 
-        "train_times":          1,
+        "train_times":          3,
         "batch_size":           16,
-        "learning_rate":        5e-5,
-        "nb_epochs":            3,
-        "warmup_epochs":        0,
+        "learning_rate":        1e-4,
+        "nb_epochs":            7,
+        "warmup_epochs":        3,
         "ignore_thresh":        0.5,
-        "gpus":                 "0",
+        "gpus":                 "0,1",
         "epoch_size":           1000,
 
         "grid_scales":          [0.5,0.7,1],
