@@ -157,6 +157,7 @@ class ImageGeneratorSingle:
         background = cv2.bitwise_and(background, background,  mask=inv_mask)
         background = cv2.bitwise_or(background, padded)
         background, applied_article_boxes = resize_to_max_size(background, target_size, np.array(np.array([bbox])))
+        background = cv2.cvtColor(background, cv2.COLOR_BGR2RGB)
         return background, applied_article_boxes, np.array([article_label])
 
     def get_random_augmentations(self, image, bbox, number_of_agumentations):
